@@ -1,0 +1,1 @@
+rsync ./* tencent:~/app/IvoryTower/
