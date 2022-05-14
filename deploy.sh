@@ -1,1 +1,1 @@
-rsync -r --progress ./* tencent:~/app/IvoryTower/
+rsync -r --progress ./* me:~/app/HomePage/dist/IvoryTower/

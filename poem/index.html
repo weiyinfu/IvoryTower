@@ -1,90 +1,93 @@
 <html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>象牙塔集</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <!--注意，user-scalable=no而不能是user-scalable=0-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.min.js"></script>
-    <style>
-        .title {
-            font-size: 25px;
-            display: flex;
-            justify-content: center;
-            font-weight: bold;
-            font-family: 楷体;
-        }
+  <meta charset="UTF-8">
+  <title>象牙塔集</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <!--注意，user-scalable=no而不能是user-scalable=0-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <script src="https://weiyinfu.cn/cdn/axios.min.js"></script>
+  <style>
+    .title {
+      font-size: 25px;
+      display: flex;
+      justify-content: center;
+      font-weight: bold;
+      font-family: 楷体;
+    }
 
-        .content {
-            font-size: 20px;
-            font-family: 楷体;
-        }
+    .content {
+      font-size: 20px;
+      font-family: 楷体;
+    }
 
-        #main {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            margin: 0;
-            padding: 0;
-        }
+    #main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      margin: 0;
+      padding: 0;
+    }
 
-        body {
-            margin: 0;
-            padding: 0;
-        }
+    body {
+      margin: 0;
+      padding: 0;
+    }
 
-        #progress {
-            background: green;
-            width: 0;
-            position: fixed;
-            height: 3px;
-        }
-    </style>
+    #progress {
+      background: green;
+      width: 0;
+      position: fixed;
+      height: 3px;
+    }
+  </style>
 </head>
+
 <body>
-<div id="progress"></div>
-<div id="main"></div>
+  <div id="progress"></div>
+  <div id="main"></div>
 </body>
 <script>
-    //判断是否为手机访问
-    const isMobile = (function () {
-        var ua = navigator.userAgent;
-        var ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
+  //判断是否为手机访问
+  const isMobile = (function () {
+    var ua = navigator.userAgent;
+    var ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
 
-            isIphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
+      isIphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
 
-            isAndroid = ua.match(/(Android)\s+([\d.]+)/)
-        return isIphone || isAndroid
-    })()
+      isAndroid = ua.match(/(Android)\s+([\d.]+)/)
+    return isIphone || isAndroid
+  })()
 
-    function split(s) {
-        if (!isMobile) return s
-        return s.replace(/([^\u4e00-\u9fa5\n](?=[\u4e00-\u9fa5]))/g, "$1\n")
+  function split(s) {
+    if (!isMobile) return s
+    return s.replace(/([^\u4e00-\u9fa5\n](?=[\u4e00-\u9fa5]))/g, "$1\n")
+  }
+
+  var poems = null
+  var main = document.querySelector("#main")
+  const progress = document.querySelector("#progress")
+  const body = document.querySelector("body")
+  axios.get("poem.json").then(resp => {
+    poems = resp.data
+    for (var i of poems) {
+      var ele = document.createElement("div")
+      var title = document.createElement("div")
+      var content = document.createElement("p")
+      title.innerHTML = i['title']
+      title.className = 'title'
+      content.innerText = split(i['content'])
+      content.className = 'content'
+      ele.appendChild(title)
+      ele.append(content)
+      main.appendChild(ele)
     }
-
-    var poems = null
-    var main = document.querySelector("#main")
-    const progress = document.querySelector("#progress")
-    const body = document.querySelector("body")
-    axios.get("poem.json").then(resp => {
-        poems = resp.data
-        for (var i of poems) {
-            var ele = document.createElement("div")
-            var title = document.createElement("div")
-            var content = document.createElement("p")
-            title.innerHTML = i['title']
-            title.className = 'title'
-            content.innerText = split(i['content'])
-            content.className = 'content'
-            ele.appendChild(title)
-            ele.append(content)
-            main.appendChild(ele)
-        }
-    })
-    document.onscroll = function () {
-        const pos = body.scrollTop / (body.scrollHeight - body.clientHeight) * 100
-        progress.style.width = pos + "%"
-    }
+  })
+  document.onscroll = function () {
+    const pos = body.scrollTop / (body.scrollHeight - body.clientHeight) * 100
+    progress.style.width = pos + "%"
+  }
 </script>
+
 </html>
