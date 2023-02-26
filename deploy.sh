@@ -1,1 +1,1 @@
-rsync -r --progress ./* me:~/app/HomePage/dist/IvoryTower/
+rsync -r --progress poem/* me:~/app/MyStatic/IvoryTower/
